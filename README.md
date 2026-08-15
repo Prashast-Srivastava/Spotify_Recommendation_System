@@ -4,15 +4,23 @@ A content-based music recommendation system built on top of your own Spotify lis
 
 ## How it works
 
+![Recommendation pipeline overview](images/process_2.png)
+
 1. **Data preparation** — Song-level Spotify data (audio features like tempo, valence, liveness, etc.) is merged with artist-level data (genres).
 2. **Feature engineering**
    - Numerical audio features are normalized.
    - `year` and `popularity` are one-hot encoded into buckets.
    - Artist genres are turned into TF-IDF features.
    - Everything is combined into a single feature set per track.
+
+   ![TF-IDF overview](images/tfidf_4.png)
 3. **Spotify API connection** — Uses [Spotipy](https://spotipy.readthedocs.io/) to pull your playlists, track metadata, and cover art directly from your Spotify account.
 4. **Playlist vector generation** — A playlist is summarized into a single vector representing its overall "sound," with a recency-weighted bias so recently added songs count more.
+
+   ![Summarizing a playlist into a single vector](images/summarization_2.png)
 5. **Recommendation generation** — Cosine similarity between the playlist vector and every non-playlist track in the catalog surfaces the top matching songs.
+
+   ![Calculating cosine similarity scores for new songs](images/cosine_sim_2.png)
 
 ## Tech stack
 
@@ -24,7 +32,7 @@ A content-based music recommendation system built on top of your own Spotify lis
 ## Project structure
 
 ```
-├── spotify-recommendation-engine.ipynb   # main notebook: data prep, feature engineering, recommendations
+├── main.ipynb                            # main notebook: data prep, feature engineering, recommendations
 ├── data/
 │   ├── data.csv                          # song-level dataset (audio features, playlist tag, popularity, etc.)
 │   ├── data_by_artist.csv                # audio features aggregated by artist
@@ -47,8 +55,13 @@ A content-based music recommendation system built on top of your own Spotify lis
 
 Point the engine at any playlist in your account, and it returns a ranked list of tracks (with cover art) from the wider catalog that best match that playlist's overall vibe — audio characteristics and genre combined.
 
+## Example Output
+
+A sample run of the recommender, showing the ranked list of recommended tracks with their cover art:
+
+![Recommendation results](result.png)
+
 ## Notes
 
 - This is an **offline, content-based** recommender — it works from audio/genre features rather than crowd behavior, so it works even for niche or small playlists with no other listeners.
 - The notebook includes an example EDM-style recommendation flow that can be adapted to any playlist by changing the playlist name.
-"# Spotify_Recommendation_System" 
